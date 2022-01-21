@@ -17,6 +17,7 @@ const FilterButton: React.FC = () => {
               isEditing: loc.isEditing,
               searchText: loc.searchText,
               filterFavorites: !loc.filterFavorites,
+              showStatistics: loc.showStatistics
             }));
         });
       }}>
