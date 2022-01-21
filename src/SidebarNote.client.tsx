@@ -95,7 +95,7 @@ const SidebarNote: React.FC<SidebarNoteProps> = ({
                 isEditing: false,
                 searchText: loc.searchText,
                 filterFavorites: loc.filterFavorites,
-                showStatistics: location.showStatistics
+                showStatistics: false
               }));
           });
         }}>

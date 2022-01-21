@@ -55,7 +55,10 @@ const App: React.FC<AppProps> = ({location}) => {
         <ShowStatisticsButton />
       </section>
       <section key={selectedId} className="col note-viewer">
-        {showStatistics ? <Statistics />
+        {showStatistics ?
+          <Suspense fallback={<NoteSkeleton isEditing={false}/>}>
+            <Statistics />
+          </Suspense>
           :
           <Suspense fallback={<NoteSkeleton isEditing={isEditing} />}>
             <Note selectedId={selectedId} isEditing={isEditing} />
