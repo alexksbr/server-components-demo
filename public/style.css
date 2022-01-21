@@ -587,6 +587,11 @@ ul.notes-list {
   opacity: 0.5;
 }
 
+.statistics-header {
+  position: absolute;
+  top: 32px;
+}
+
 .label {
   display: inline-block;
   border-radius: 100px;

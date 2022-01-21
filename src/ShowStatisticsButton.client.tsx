@@ -9,11 +9,12 @@ const ShowStatisticsButton: React.FC = () => {
     <button
       className="button statistics-button"
       disabled={isPending}
+      style={{opacity: isPending ? '0.5' : '1.0'}}
       onClick={() => {
         startTransition(() => {
           setLocation &&
           setLocation((loc) => ({
-            selectedId: loc.selectedId,
+            selectedId: null,
             isEditing: loc.isEditing,
             searchText: loc.searchText,
             filterFavorites: loc.filterFavorites,
