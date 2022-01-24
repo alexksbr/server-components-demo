@@ -26,13 +26,16 @@ const ClientNoteList: React.FC<ClientNoteListProps> = ({
   }, [noteListOffset]);
 
   return noteState.length > 0 ? (
-    <ul className="notes-list">
-      {noteState.map((note) => (
-        <li key={note.id}>
-          <SidebarNote note={note} />
-        </li>
-      ))}
-    </ul>
+    <>
+      <ul className="notes-list">
+        {noteState.map((note) => (
+          <li key={note.id}>
+            <SidebarNote note={note} />
+          </li>
+        ))}
+      </ul>
+      <button className="button load-more-button">Load more ...</button>
+    </>
   ) : (
     <div className="notes-empty">
       {searchText

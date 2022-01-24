@@ -262,6 +262,11 @@ hr {
   margin-inline-start: 6px;
   border: none;
 }
+.load-more-button {
+  display: block;
+  margin: auto;
+  border: none;
+}
 
 ul.notes-list {
   padding: 16px 0;
