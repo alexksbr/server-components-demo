@@ -22,7 +22,13 @@ interface AppProps {
 }
 
 const App: React.FC<AppProps> = ({location}) => {
-  const {selectedId, isEditing, searchText, filterFavorites} = location;
+  const {
+    selectedId,
+    isEditing,
+    searchText,
+    filterFavorites,
+    noteListOffset,
+  } = location;
   return (
     <div className="main">
       <section className="col sidebar">
@@ -47,6 +53,7 @@ const App: React.FC<AppProps> = ({location}) => {
             <NoteList
               searchText={searchText}
               filterFavorites={filterFavorites}
+              noteListOffset={noteListOffset}
             />
           </Suspense>
         </nav>

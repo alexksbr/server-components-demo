@@ -111,6 +111,7 @@ function sendResponse(req: any, res: any, redirectToId: any) {
       isEditing: location.isEditing,
       searchText: location.searchText,
       filterFavorites: location.filterFavorites,
+      noteListOffset: location.noteListOffset,
     },
   });
 }

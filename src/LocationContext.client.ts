@@ -18,6 +18,7 @@ export const LocationContext = createContext<{
     isEditing: false,
     searchText: '',
     filterFavorites: false,
+    noteListOffset: 0,
   },
 });
 export function useLocation() {

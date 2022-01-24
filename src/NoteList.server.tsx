@@ -12,17 +12,22 @@ import SidebarNote from './SidebarNote';
 interface NoteListProps {
   searchText: string;
   filterFavorites: boolean;
+  noteListOffset: number;
 }
 
-const NoteList: React.FC<NoteListProps> = ({searchText, filterFavorites}) => {
+const NoteList: React.FC<NoteListProps> = ({
+  searchText,
+  filterFavorites,
+  noteListOffset,
+}) => {
   // const notes = fetch('http://localhost:4000/notes').json();
 
   // WARNING: This is for demo purposes only.
   // We don't encourage this in real apps. There are far safer ways to access
   // data in a real application!
   const query = filterFavorites
-    ? `select * from notes where title ilike $1 AND favorite=true order by id desc`
-    : `select * from notes where title ilike $1 order by id desc`;
+    ? `select * from notes where title ilike $1 AND favorite=true order by id desc OFFSET ${noteListOffset} FETCH NEXT 7 ROWS ONLY`
+    : `select * from notes where title ilike $1 order by id desc OFFSET ${noteListOffset} FETCH NEXT 7 ROWS ONLY`;
 
   const notes = db.query(query, ['%' + searchText + '%']).rows;
 
