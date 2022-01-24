@@ -7,7 +7,8 @@
  */
 
 import {db} from './db.server';
-import SidebarNote from './SidebarNote';
+import ClientNoteList from './NoteList.client';
+import {SerializedNote} from './types';
 
 interface NoteListProps {
   searchText: string;
@@ -29,25 +30,23 @@ const NoteList: React.FC<NoteListProps> = ({
     ? `select * from notes where title ilike $1 AND favorite=true order by id desc OFFSET ${noteListOffset} FETCH NEXT 7 ROWS ONLY`
     : `select * from notes where title ilike $1 order by id desc OFFSET ${noteListOffset} FETCH NEXT 7 ROWS ONLY`;
 
-  const notes = db.query(query, ['%' + searchText + '%']).rows;
+  const notes: SerializedNote[] = db
+    .query(query, ['%' + searchText + '%'])
+    .rows.map((note) => ({
+      ...note,
+      updated_at: note.updated_at.toString(),
+      created_at: undefined,
+    }));
 
   // Now let's see how the Suspense boundary above lets us not block on this.
   // fetch('http://localhost:4000/sleep/3000');
 
-  return notes.length > 0 ? (
-    <ul className="notes-list">
-      {notes.map((note) => (
-        <li key={note.id}>
-          <SidebarNote note={note} />
-        </li>
-      ))}
-    </ul>
-  ) : (
-    <div className="notes-empty">
-      {searchText
-        ? `Couldn't find any notes titled "${searchText}".`
-        : 'No notes created yet!'}{' '}
-    </div>
+  return (
+    <ClientNoteList
+      notes={notes}
+      searchText={searchText}
+      noteListOffset={noteListOffset}
+    />
   );
 };
 

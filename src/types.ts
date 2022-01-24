@@ -22,6 +22,14 @@ export interface Note {
   updated_at: Date;
 }
 
+export interface SerializedNote {
+  id: number;
+  title: string;
+  body: string;
+  favorite: boolean;
+  updated_at: string;
+}
+
 export interface Response {
   readRoot: () => ReactNode;
 }
