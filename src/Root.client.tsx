@@ -29,6 +29,7 @@ const Content = () => {
     isEditing: false,
     searchText: '',
     filterFavorites: false,
+    showStatistics: false
   });
   const response = useServerResponse(location);
   return (

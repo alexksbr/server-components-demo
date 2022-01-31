@@ -53,6 +53,7 @@ const SidebarNote: React.FC<SidebarNoteProps> = ({
       isEditing: false,
       searchText: location.searchText,
       filterFavorites: location.filterFavorites,
+      showStatistics: location.showStatistics
     };
     const response = await updateNote(payload, requestedLocation);
 
@@ -94,6 +95,7 @@ const SidebarNote: React.FC<SidebarNoteProps> = ({
                 isEditing: false,
                 searchText: loc.searchText,
                 filterFavorites: loc.filterFavorites,
+                showStatistics: false
               }));
           });
         }}>

@@ -16,13 +16,15 @@ import NoteSkeleton from './NoteSkeleton';
 import NoteListSkeleton from './NoteListSkeleton';
 import {ILocation} from './types';
 import FilterButton from './FilterButton.client';
+import ShowStatisticsButton from './ShowStatisticsButton.client';
+import Statistics from './Statistics.server';
 
 interface AppProps {
   location: ILocation;
 }
 
 const App: React.FC<AppProps> = ({location}) => {
-  const {selectedId, isEditing, searchText, filterFavorites} = location;
+  const {selectedId, isEditing, searchText, filterFavorites, showStatistics} = location;
   return (
     <div className="main">
       <section className="col sidebar">
@@ -50,11 +52,18 @@ const App: React.FC<AppProps> = ({location}) => {
             />
           </Suspense>
         </nav>
+        <ShowStatisticsButton />
       </section>
       <section key={selectedId} className="col note-viewer">
-        <Suspense fallback={<NoteSkeleton isEditing={isEditing} />}>
-          <Note selectedId={selectedId} isEditing={isEditing} />
-        </Suspense>
+        {showStatistics ?
+          <Suspense fallback={<NoteSkeleton isEditing={false}/>}>
+            <Statistics />
+          </Suspense>
+          :
+          <Suspense fallback={<NoteSkeleton isEditing={isEditing} />}>
+            <Note selectedId={selectedId} isEditing={isEditing} />
+          </Suspense>
+        }
       </section>
     </div>
   );
