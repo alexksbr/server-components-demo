@@ -25,7 +25,7 @@ const SidebarNote: React.FC<SidebarNoteProps> = ({
   children,
   expandedChildren,
 }) => {
-  const {navigate} = useNavigation();
+  const {isNavigating, navigate} = useNavigation();
   const {location, setLocation} = useLocation();
   const [isPending, startTransition] = useTransition();
   const [isExpanded, setIsExpanded] = useState(false);
@@ -41,7 +41,7 @@ const SidebarNote: React.FC<SidebarNoteProps> = ({
     }
   }, [title]);
 
-  const {performMutation: updateNote} = useMutation({
+  const {performMutation: updateNote, isSaving} = useMutation({
     endpoint: `/notes/${id}`,
     method: 'PUT',
   });
@@ -118,7 +118,13 @@ const SidebarNote: React.FC<SidebarNoteProps> = ({
           <img src="chevron-up.svg" width="10px" height="10px" alt="Expand" />
         )}
       </button>
-      <button className="sidebar-note-toggle-favorite" onClick={toggleFavorite}>
+      <button className="sidebar-note-toggle-favorite"
+        onClick={toggleFavorite}
+        disabled={isNavigating || isSaving}
+        style={{
+          opacity: isNavigating || isSaving ? '0.5' : '1.0'
+        }}
+      >
         <img
           src={favorite ? 'star-fill.svg' : 'star-line.svg'}
           width="20px"
