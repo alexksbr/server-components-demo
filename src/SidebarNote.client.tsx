@@ -25,11 +25,10 @@ const SidebarNote: React.FC<SidebarNoteProps> = ({
   children,
   expandedChildren,
 }) => {
-  const {navigate} = useNavigation();
+  const {isNavigating, navigate} = useNavigation();
   const {location, setLocation} = useLocation();
   const [isPending, startTransition] = useTransition();
   const [isExpanded, setIsExpanded] = useState(false);
-  const [isPendingToggleFavorite, setIsPendingToggleFavorite] = useState(false);
   const isActive = id === location.selectedId;
 
   // Animate after title is edited.
@@ -42,7 +41,7 @@ const SidebarNote: React.FC<SidebarNoteProps> = ({
     }
   }, [title]);
 
-  const {performMutation: updateNote} = useMutation({
+  const {performMutation: updateNote, isSaving} = useMutation({
     endpoint: `/notes/${id}`,
     method: 'PUT',
   });
@@ -56,7 +55,6 @@ const SidebarNote: React.FC<SidebarNoteProps> = ({
       filterFavorites: location.filterFavorites,
       showStatistics: location.showStatistics
     };
-    setIsPendingToggleFavorite(true);
     const response = await updateNote(payload, requestedLocation);
 
     if (!response) {
@@ -64,7 +62,6 @@ const SidebarNote: React.FC<SidebarNoteProps> = ({
     }
 
     navigate(response);
-    setIsPendingToggleFavorite(false);
   }
 
   return (
@@ -123,9 +120,9 @@ const SidebarNote: React.FC<SidebarNoteProps> = ({
       </button>
       <button className="sidebar-note-toggle-favorite"
         onClick={toggleFavorite}
-        disabled={isPendingToggleFavorite}
+        disabled={isNavigating || isSaving}
         style={{
-          opacity: isPendingToggleFavorite ? '0.5' : '1.0'
+          opacity: isNavigating || isSaving ? '0.5' : '1.0'
         }}
       >
         <img
