@@ -11,35 +11,35 @@ import marked from 'marked';
 import sanitizeHtml from 'sanitize-html';
 
 const allowedTags = sanitizeHtml.defaults.allowedTags.concat([
-  'img',
-  'h1',
-  'h2',
-  'h3',
+    'img',
+    'h1',
+    'h2',
+    'h3',
 ]);
 const allowedAttributes = Object.assign(
-  {},
-  sanitizeHtml.defaults.allowedAttributes,
-  {
-    img: ['alt', 'src'],
-  }
+    {},
+    sanitizeHtml.defaults.allowedAttributes,
+    {
+        img: ['alt', 'src'],
+    }
 );
 
 interface TextWithMarkdownProps {
-  text: string;
+    text: string;
 }
 
 const TextWithMarkdown: React.FC<TextWithMarkdownProps> = ({text}) => {
-  return (
-    <div
-      className="text-with-markdown"
-      dangerouslySetInnerHTML={{
-        __html: sanitizeHtml(marked(text), {
-          allowedTags,
-          allowedAttributes,
-        }),
-      }}
-    />
-  );
+    return (
+        <div
+            className="text-with-markdown"
+            dangerouslySetInnerHTML={{
+                __html: sanitizeHtml(marked(text), {
+                    allowedTags,
+                    allowedAttributes,
+                }),
+            }}
+        />
+    );
 };
 
 export default TextWithMarkdown;

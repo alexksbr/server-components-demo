@@ -19,27 +19,27 @@ const EditButton: React.FC<EditButtonProps> = ({noteId, children}) => {
   const [isPending, startTransition] = useTransition();
   const isDraft = noteId == null;
   return (
-    <button
-      className={[
-        'button',
-        isDraft ? 'edit-button--solid' : 'edit-button--outline',
-      ].join(' ')}
-      disabled={isPending}
-      onClick={() => {
-        startTransition(() => {
-          setLocation &&
-            setLocation((loc) => ({
-              selectedId: noteId,
-              isEditing: true,
-              searchText: loc.searchText,
-              filterFavorites: location.filterFavorites,
-              showStatistics: location.showStatistics
-            }));
-        });
-      }}
-      role="menuitem">
-      {children}
-    </button>
+      <button
+          className={[
+              'button',
+              isDraft ? 'edit-button--solid' : 'edit-button--outline',
+          ].join(' ')}
+          disabled={isPending}
+          onClick={() => {
+              startTransition(() => {
+                  setLocation &&
+                      setLocation((loc) => ({
+                          selectedId: noteId,
+                          isEditing: true,
+                          searchText: loc.searchText,
+                          filterFavorites: location.filterFavorites,
+                          showStatistics: location.showStatistics,
+                      }));
+              });
+          }}
+          role="menuitem">
+          {children}
+      </button>
   );
 };
 
