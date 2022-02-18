@@ -6,71 +6,34 @@
  *
  */
 
-import {Suspense} from 'react';
+import React, {Suspense} from 'react';
+import LoadingWithDirectRenderClient from './LoadingWithDirectRender.client';
+import LoadingWithLateRenderClient from './LoadingWithLateRender.client';
+import Loading from './Loading.server';
 
-import Note from './Note.server';
-import NoteList from './NoteList.server';
-import EditButton from './EditButton.client';
-import SearchField from './SearchField.client';
-import NoteSkeleton from './NoteSkeleton';
-import NoteListSkeleton from './NoteListSkeleton';
-import {ILocation} from './types';
-import FilterButton from './FilterButton.client';
-import ShowStatisticsButton from './ShowStatisticsButton.client';
-import Statistics from './Statistics.server';
-
-interface AppProps {
-    location: ILocation;
-}
-
-const App: React.FC<AppProps> = ({location}) => {
-    const {
-        selectedId,
-        isEditing,
-        searchText,
-        filterFavorites,
-        showStatistics,
-    } = location;
+const App: React.FC = () => {
     return (
         <div className="main">
-            <section className="col sidebar">
-                <section className="sidebar-header">
-                    <img
-                        className="logo"
-                        src="logo.svg"
-                        width="22px"
-                        height="20px"
-                        alt=""
-                        role="presentation"
-                    />
-                    <strong>React Notes</strong>
-                </section>
-                <section className="sidebar-menu" role="menubar">
-                    <SearchField />
-                    <FilterButton />
-                    <EditButton noteId={null}>New</EditButton>
-                </section>
-                <nav>
-                    <Suspense fallback={<NoteListSkeleton />}>
-                        <NoteList
-                            searchText={searchText}
-                            filterFavorites={filterFavorites}
-                        />
-                    </Suspense>
-                </nav>
-                <ShowStatisticsButton />
-            </section>
-            <section key={selectedId} className="col note-viewer">
-                {showStatistics ? (
-                    <Suspense fallback={<NoteSkeleton isEditing={false} />}>
-                        <Statistics />
-                    </Suspense>
-                ) : (
-                    <Suspense fallback={<NoteSkeleton isEditing={isEditing} />}>
-                        <Note selectedId={selectedId} isEditing={isEditing} />
-                    </Suspense>
-                )}
-            </section>
+            {/*Bad user experience*/}
+            <LoadingWithDirectRenderClient loadingTime={2000}>
+                <LoadingWithDirectRenderClient loadingTime={4000} />
+                <LoadingWithDirectRenderClient loadingTime={1000} />
+            </LoadingWithDirectRenderClient>
+
+            {/*Client-Server waterfall*/}
+            {/*            <LoadingWithLateRenderClient loadingTime={2000}>
+                <LoadingWithLateRenderClient loadingTime={4000} />
+                <LoadingWithLateRenderClient loadingTime={1000} />
+            </LoadingWithLateRenderClient>*/}
+
+            {/*Solving the problem using a Server component: the component and
+            hence the waterfall now live on the server side*/}
+            {/*            <Suspense fallback={<div>Loading</div>}>
+                <Loading loadingTime={2000}>
+                    <Loading loadingTime={4000} />
+                    <Loading loadingTime={1000} />
+                </Loading>
+            </Suspense>*/}
         </div>
     );
 };
