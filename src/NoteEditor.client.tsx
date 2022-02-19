@@ -9,7 +9,7 @@
 import {useState} from 'react';
 
 import NotePreview from './NotePreview';
-import {useMutation, useNavigation} from './util';
+import {useLocationMutation, useLocationNavigation} from './util';
 
 interface NoteEditorProps {
   noteId: number | null;
@@ -22,14 +22,14 @@ const NoteEditor: React.FC<NoteEditorProps> = ({
   initialTitle,
   initialBody,
 }) => {
-  const {isNavigating, navigate, location} = useNavigation();
+  const {isNavigating, navigate, location} = useLocationNavigation();
   const [title, setTitle] = useState(initialTitle);
   const [body, setBody] = useState(initialBody);
-  const {isSaving, performMutation: saveNote} = useMutation({
+  const {isSaving, performMutation: saveNote} = useLocationMutation({
     endpoint: noteId !== null ? `/notes/${noteId}` : `/notes`,
     method: noteId !== null ? 'PUT' : 'POST',
   });
-  const {isSaving: isDeleting, performMutation: deleteNote} = useMutation({
+  const {isSaving: isDeleting, performMutation: deleteNote} = useLocationMutation({
     endpoint: `/notes/${noteId}`,
     method: 'DELETE',
   });
@@ -39,8 +39,6 @@ const NoteEditor: React.FC<NoteEditorProps> = ({
     const requestedLocation = {
       selectedId: noteId,
       isEditing: false,
-      searchText: location.searchText,
-      filterFavorites: location.filterFavorites,
       showStatistics: location.showStatistics
     };
     const response = await saveNote(payload, requestedLocation);
@@ -57,8 +55,6 @@ const NoteEditor: React.FC<NoteEditorProps> = ({
     const requestedLocation = {
       selectedId: null,
       isEditing: false,
-      searchText: location.searchText,
-      filterFavorites: location.filterFavorites,
       showStatistics: location.showStatistics
     };
     const response = await deleteNote(payload, requestedLocation);

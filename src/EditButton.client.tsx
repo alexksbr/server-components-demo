@@ -28,12 +28,10 @@ const EditButton: React.FC<EditButtonProps> = ({noteId, children}) => {
       onClick={() => {
         startTransition(() => {
           setLocation &&
-            setLocation((loc) => ({
+            setLocation(() => ({
               selectedId: noteId,
               isEditing: true,
-              searchText: loc.searchText,
-              filterFavorites: location.filterFavorites,
-              showStatistics: location.showStatistics
+              showStatistics: location.showStatistics,
             }));
         });
       }}

@@ -1,9 +1,10 @@
 import {useLocation} from './LocationContext.client';
 import {useTransition} from 'react';
+import {useFilterSettings} from './FilterSettingsContext.client';
 
 const FilterButton: React.FC = () => {
-  const {location, setLocation} = useLocation();
   const [isPending, startTransition] = useTransition();
+  const {filterSettings, setFilterSettings} = useFilterSettings();
 
   return (
     <button
@@ -11,18 +12,17 @@ const FilterButton: React.FC = () => {
       disabled={isPending}
       onClick={() => {
         startTransition(() => {
-          setLocation &&
-            setLocation((loc) => ({
-              selectedId: loc.selectedId,
-              isEditing: loc.isEditing,
-              searchText: loc.searchText,
-              filterFavorites: !loc.filterFavorites,
-              showStatistics: loc.showStatistics
+          setFilterSettings &&
+            setFilterSettings((filterSettings) => ({
+              searchText: filterSettings.searchText,
+              filterFavorites: !filterSettings.filterFavorites,
             }));
         });
       }}>
       <img
-        src={location.filterFavorites ? 'filter-fill.svg' : 'filter-line.svg'}
+        src={
+          filterSettings.filterFavorites ? 'filter-fill.svg' : 'filter-line.svg'
+        }
         alt="toggle-filter"
       />
     </button>

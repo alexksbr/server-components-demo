@@ -5,7 +5,7 @@
  * LICENSE file in the root directory of this source tree.
  *
  */
-import {ILocation} from '../src/types';
+import {IFilterSettings, ILocation} from '../src/types';
 
 const register = require('react-server-dom-webpack/node-register');
 register();
@@ -26,6 +26,7 @@ const path = require('path');
 const {Pool} = require('pg');
 const React = require('react');
 import App from '../src/App.server';
+import NoteList from '../src/NoteList.server';
 
 // Don't keep credentials in the source tree in a real app!
 const pool = new Pool(require('../credentials').default);
@@ -85,7 +86,7 @@ app.get(
   })
 );
 
-async function renderReactTree(res: any, props: {location: ILocation}) {
+async function renderAppReactTree(res: any, props: {location: ILocation}) {
   await waitForWebpack();
   const manifest = readFileSync(
     path.resolve(__dirname, '../../build/react-client-manifest.json'),
@@ -99,25 +100,55 @@ async function renderReactTree(res: any, props: {location: ILocation}) {
   pipe(res);
 }
 
-function sendResponse(req: any, res: any, redirectToId: any) {
+async function renderNoteListReactTree(
+  res: any,
+  props: {filterSettings: IFilterSettings}
+) {
+  await waitForWebpack();
+  const manifest = readFileSync(
+    path.resolve(__dirname, '../../build/react-client-manifest.json'),
+    'utf8'
+  );
+  const moduleMap = JSON.parse(manifest);
+  const {pipe} = renderToPipeableStream(
+    React.createElement(NoteList, props),
+    moduleMap
+  );
+  pipe(res);
+}
+
+function sendLocationResponse(req: any, res: any, redirectToId: any) {
   const location = JSON.parse(req.query.location);
   if (redirectToId) {
     location.selectedId = redirectToId;
   }
   res.set('X-Location', JSON.stringify(location));
-  renderReactTree(res, {
+  renderAppReactTree(res, {
     location: {
       selectedId: location.selectedId,
       isEditing: location.isEditing,
-      searchText: location.searchText,
-      filterFavorites: location.filterFavorites,
-      showStatistics: location.showStatistics
+      showStatistics: location.showStatistics,
+    },
+  });
+}
+
+function sendNoteListResponse(req: any, res: any) {
+  const filterSettings = JSON.parse(req.query.filtersettings);
+  res.set('X-Location', JSON.stringify(filterSettings));
+  renderNoteListReactTree(res, {
+    filterSettings: {
+      searchText: filterSettings.searchText,
+      filterFavorites: filterSettings.filterFavorites,
     },
   });
 }
 
 app.get('/react', function(req: any, res: any) {
-  sendResponse(req, res, null);
+  sendLocationResponse(req, res, null);
+});
+
+app.get('/react/notelist', function(req: any, res: any) {
+  sendNoteListResponse(req, res);
 });
 
 const NOTES_PATH = path.resolve(__dirname, '../../notes');
@@ -136,7 +167,7 @@ app.post(
       req.body.body,
       'utf8'
     );
-    sendResponse(req, res, insertedId);
+    sendLocationResponse(req, res, insertedId);
   })
 );
 
@@ -170,7 +201,14 @@ app.put(
         'utf8'
       );
     }
-    sendResponse(req, res, null);
+
+    if (!!req.query.location) {
+      sendLocationResponse(req, res, null);
+    } else if (!!req.query.filtersettings) {
+      sendNoteListResponse(req, res);
+    } else {
+      throw Error('No valid query parameter set');
+    }
   })
 );
 
@@ -179,7 +217,7 @@ app.delete(
   handleErrors(async function(req: any, res: any) {
     await pool.query('delete from notes where id = $1', [req.params.id]);
     await unlink(path.resolve(NOTES_PATH, `${req.params.id}.md`));
-    sendResponse(req, res, null);
+    sendLocationResponse(req, res, null);
   })
 );
 

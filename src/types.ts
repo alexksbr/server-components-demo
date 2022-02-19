@@ -3,9 +3,12 @@ import {ReactNode} from 'react';
 export interface ILocation {
   selectedId: number | null;
   isEditing: boolean;
+  showStatistics: boolean;
+}
+
+export interface IFilterSettings {
   searchText: string;
   filterFavorites: boolean;
-  showStatistics: boolean;
 }
 
 export type LocationCache = Map<string, Response>;
