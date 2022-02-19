@@ -10,15 +10,15 @@ import {createContext, Dispatch, SetStateAction, useContext} from 'react';
 import {IFilterSettings, ILocation} from './types';
 
 export const FilterSettingsContext = createContext<{
-  filterSettings: IFilterSettings;
-  setFilterSettings?: Dispatch<SetStateAction<IFilterSettings>>;
+    filterSettings: IFilterSettings;
+    setFilterSettings?: Dispatch<SetStateAction<IFilterSettings>>;
 }>({
-  filterSettings: {
-    searchText: '',
-    filterFavorites: false,
-  },
+    filterSettings: {
+        searchText: '',
+        filterFavorites: false,
+    },
 });
 
 export function useFilterSettings() {
-  return useContext(FilterSettingsContext);
+    return useContext(FilterSettingsContext);
 }

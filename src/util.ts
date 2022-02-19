@@ -55,51 +55,51 @@ export function useLocationMutation({
 }
 
 export function useFilterSettingsMutation({
-  endpoint,
-  method,
+    endpoint,
+    method,
 }: {
-  endpoint: string;
-  method: string;
+    endpoint: string;
+    method: string;
 }) {
-  const [isSaving, setIsSaving] = useState(false);
-  const [didError, setDidError] = useState(false);
-  const [error, setError] = useState(null);
-  if (didError) {
-    // Let the nearest error boundary handle errors while saving.
-    throw error;
-  }
-
-  async function performMutation(
-    payload: {title?: string; body?: string; favorite?: boolean},
-    filterSettings: IFilterSettings
-  ) {
-    setIsSaving(true);
-    try {
-      const response = await fetch(
-        `${endpoint}?filtersettings=${encodeURIComponent(
-          JSON.stringify(filterSettings)
-        )}`,
-        {
-          method,
-          body: JSON.stringify(payload),
-          headers: {
-            'Content-Type': 'application/json',
-          },
-        }
-      );
-      if (!response.ok) {
-        throw new Error(await response.text());
-      }
-      return response;
-    } catch (e) {
-      setDidError(true);
-      setError(e as any);
-    } finally {
-      setIsSaving(false);
+    const [isSaving, setIsSaving] = useState(false);
+    const [didError, setDidError] = useState(false);
+    const [error, setError] = useState(null);
+    if (didError) {
+        // Let the nearest error boundary handle errors while saving.
+        throw error;
     }
-  }
 
-  return {isSaving, performMutation};
+    async function performMutation(
+        payload: {title?: string; body?: string; favorite?: boolean},
+        filterSettings: IFilterSettings
+    ) {
+        setIsSaving(true);
+        try {
+            const response = await fetch(
+                `${endpoint}?filtersettings=${encodeURIComponent(
+                    JSON.stringify(filterSettings)
+                )}`,
+                {
+                    method,
+                    body: JSON.stringify(payload),
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                }
+            );
+            if (!response.ok) {
+                throw new Error(await response.text());
+            }
+            return response;
+        } catch (e) {
+            setDidError(true);
+            setError(e as any);
+        } finally {
+            setIsSaving(false);
+        }
+    }
+
+    return {isSaving, performMutation};
 }
 
 export function useLocationNavigation() {
@@ -126,24 +126,24 @@ export function useLocationNavigation() {
 }
 
 export function useFilterSettingsNavigation() {
-  const refresh = useRefresh();
-  const [isNavigating, startNavigating] = useTransition();
-  const {filterSettings, setFilterSettings} = useFilterSettings();
+    const refresh = useRefresh();
+    const [isNavigating, startNavigating] = useTransition();
+    const {filterSettings, setFilterSettings} = useFilterSettings();
 
-  function navigate(response: Response) {
-    const cacheKey = response.headers.get('X-Location');
+    function navigate(response: Response) {
+        const cacheKey = response.headers.get('X-Location');
 
-    if (!cacheKey) {
-      throw new Error('X-Location header is not set');
+        if (!cacheKey) {
+            throw new Error('X-Location header is not set');
+        }
+
+        const nextFilterSettings = JSON.parse(cacheKey);
+        const seededResponse = createFromReadableStream(response.body);
+        startNavigating(() => {
+            refresh(cacheKey, seededResponse);
+            setFilterSettings && setFilterSettings(nextFilterSettings);
+        });
     }
 
-    const nextFilterSettings = JSON.parse(cacheKey);
-    const seededResponse = createFromReadableStream(response.body);
-    startNavigating(() => {
-      refresh(cacheKey, seededResponse);
-      setFilterSettings && setFilterSettings(nextFilterSettings);
-    });
-  }
-
-  return {isNavigating, filterSettings, navigate};
+    return {isNavigating, filterSettings, navigate};
 }

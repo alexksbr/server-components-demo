@@ -11,31 +11,32 @@ import NoteList from './NoteList.server';
 import {IFilterSettings} from './types';
 import {FilterSettingsContext} from './FilterSettingsContext.client';
 import {
-  useFilterSettingsServerResponse,
-  useLocationServerResponse,
+    useFilterSettingsServerResponse,
+    useLocationServerResponse,
 } from './Cache.client';
 import SearchField from './SearchField.client';
 import FilterButton from './FilterButton.client';
 import EditButton from './EditButton.client';
 
 const ClientApp: React.FC = () => {
-  const [filterSettings, setFilterSettings] = useState<IFilterSettings>({
-    searchText: '',
-    filterFavorites: false,
-  });
+    const [filterSettings, setFilterSettings] = useState<IFilterSettings>({
+        searchText: '',
+        filterFavorites: false,
+    });
 
-  const response = useFilterSettingsServerResponse(filterSettings);
+    const response = useFilterSettingsServerResponse(filterSettings);
 
-  return (
-    <FilterSettingsContext.Provider value={{filterSettings, setFilterSettings}}>
-      <section className="sidebar-menu" role="menubar">
-        <SearchField />
-        <FilterButton />
-        <EditButton noteId={null}>New</EditButton>
-      </section>
-      {response.readRoot()}
-    </FilterSettingsContext.Provider>
-  );
+    return (
+        <FilterSettingsContext.Provider
+            value={{filterSettings, setFilterSettings}}>
+            <section className="sidebar-menu" role="menubar">
+                <SearchField />
+                <FilterButton />
+                <EditButton noteId={null}>New</EditButton>
+            </section>
+            {response.readRoot()}
+        </FilterSettingsContext.Provider>
+    );
 };
 
 export default ClientApp;

@@ -10,10 +10,10 @@ import {useState, useRef, useEffect, useTransition, ReactElement} from 'react';
 
 import {useLocation} from './LocationContext.client';
 import {
-  useLocationMutation,
-  useLocationNavigation,
-  useFilterSettingsNavigation,
-  useFilterSettingsMutation,
+    useLocationMutation,
+    useLocationNavigation,
+    useFilterSettingsNavigation,
+    useFilterSettingsMutation,
 } from './util';
 import {IFilterSettings} from './types';
 import {useFilterSettings} from './FilterSettingsContext.client';
@@ -34,7 +34,7 @@ const SidebarNote: React.FC<SidebarNoteProps> = ({
 }) => {
     const {isNavigating, navigate} = useFilterSettingsNavigation();
     const {location, setLocation} = useLocation();
-  const {filterSettings, setFilterSettings} = useFilterSettings();
+    const {filterSettings, setFilterSettings} = useFilterSettings();
     const [isPending, startTransition] = useTransition();
     const [isExpanded, setIsExpanded] = useState(false);
     const isActive = id === location.selectedId;
@@ -54,13 +54,13 @@ const SidebarNote: React.FC<SidebarNoteProps> = ({
         method: 'PUT',
     });
 
-  async function toggleFavorite() {
-    const payload = {favorite: !favorite};
-    const newFilterSettings: IFilterSettings = {
-      filterFavorites: filterSettings.filterFavorites,
-      searchText: filterSettings.searchText,
-    };
-    const response = await updateNote(payload, newFilterSettings);
+    async function toggleFavorite() {
+        const payload = {favorite: !favorite};
+        const newFilterSettings: IFilterSettings = {
+            filterFavorites: filterSettings.filterFavorites,
+            searchText: filterSettings.searchText,
+        };
+        const response = await updateNote(payload, newFilterSettings);
 
         if (!response) {
             throw new Error(`Something went wrong when saving note ${id}`);
@@ -124,14 +124,15 @@ const SidebarNote: React.FC<SidebarNoteProps> = ({
                         height="10px"
                         alt="Expand"
                     />
-                )}</button>
-      <button
-        className="sidebar-note-toggle-favorite"
-        onClick={toggleFavorite}
-        disabled={isNavigating || isSaving}
-        style={{
-          opacity: isNavigating || isSaving ? '0.5' : '1.0',
-        }}>
+                )}
+            </button>
+            <button
+                className="sidebar-note-toggle-favorite"
+                onClick={toggleFavorite}
+                disabled={isNavigating || isSaving}
+                style={{
+                    opacity: isNavigating || isSaving ? '0.5' : '1.0',
+                }}>
                 <img
                     src={favorite ? 'star-fill.svg' : 'star-line.svg'}
                     width="20px"

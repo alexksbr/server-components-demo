@@ -16,7 +16,7 @@ interface NoteListProps {
 
 const NoteList: React.FC<NoteListProps> = ({filterSettings}) => {
     // const notes = fetch('http://localhost:4000/notes').json();
-  const {filterFavorites, searchText} = filterSettings;
+    const {filterFavorites, searchText} = filterSettings;
 
     // WARNING: This is for demo purposes only.
     // We don't encourage this in real apps. There are far safer ways to access

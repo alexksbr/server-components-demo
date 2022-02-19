@@ -40,15 +40,17 @@ export function useLocationServerResponse(location: ILocation) {
 }
 
 export function useFilterSettingsServerResponse(location: IFilterSettings) {
-  const key = JSON.stringify(location);
-  const cache = unstable_getCacheForType(createResponseCache) as LocationCache;
-  let response = cache.get(key);
-  if (response !== undefined) {
-    return response;
-  }
-  const fetchResponse = createFromFetch(
-    fetch('/react/notelist?filtersettings=' + encodeURIComponent(key))
-  ) as Response;
-  cache.set(key, fetchResponse);
-  return fetchResponse;
+    const key = JSON.stringify(location);
+    const cache = unstable_getCacheForType(
+        createResponseCache
+    ) as LocationCache;
+    let response = cache.get(key);
+    if (response !== undefined) {
+        return response;
+    }
+    const fetchResponse = createFromFetch(
+        fetch('/react/notelist?filtersettings=' + encodeURIComponent(key))
+    ) as Response;
+    cache.set(key, fetchResponse);
+    return fetchResponse;
 }

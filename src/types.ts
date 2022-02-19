@@ -7,8 +7,8 @@ export interface ILocation {
 }
 
 export interface IFilterSettings {
-  searchText: string;
-  filterFavorites: boolean;
+    searchText: string;
+    filterFavorites: boolean;
 }
 
 export type LocationCache = Map<string, Response>;

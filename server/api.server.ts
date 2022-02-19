@@ -98,49 +98,47 @@ async function renderAppReactTree(res: any, props: {location: ILocation}) {
     pipe(res);
 }
 
-
-
 async function renderNoteListReactTree(
-  res: any,
-  props: {filterSettings: IFilterSettings}
+    res: any,
+    props: {filterSettings: IFilterSettings}
 ) {
-  await waitForWebpack();
-  const manifest = readFileSync(
-    path.resolve(__dirname, '../../build/react-client-manifest.json'),
-    'utf8'
-  );
-  const moduleMap = JSON.parse(manifest);
-  const {pipe} = renderToPipeableStream(
-    React.createElement(NoteList, props),
-    moduleMap
-  );
-  pipe(res);
+    await waitForWebpack();
+    const manifest = readFileSync(
+        path.resolve(__dirname, '../../build/react-client-manifest.json'),
+        'utf8'
+    );
+    const moduleMap = JSON.parse(manifest);
+    const {pipe} = renderToPipeableStream(
+        React.createElement(NoteList, props),
+        moduleMap
+    );
+    pipe(res);
 }
 
 function sendLocationResponse(req: any, res: any, redirectToId: any) {
-  const location = JSON.parse(req.query.location);
-  if (redirectToId) {
-    location.selectedId = redirectToId;
-  }
-  res.set('X-Location', JSON.stringify(location));
-  renderAppReactTree(res, {
-    location: {
-      selectedId: location.selectedId,
-      isEditing: location.isEditing,
-      showStatistics: location.showStatistics,
-    },
-  });
+    const location = JSON.parse(req.query.location);
+    if (redirectToId) {
+        location.selectedId = redirectToId;
+    }
+    res.set('X-Location', JSON.stringify(location));
+    renderAppReactTree(res, {
+        location: {
+            selectedId: location.selectedId,
+            isEditing: location.isEditing,
+            showStatistics: location.showStatistics,
+        },
+    });
 }
 
 function sendNoteListResponse(req: any, res: any) {
-  const filterSettings = JSON.parse(req.query.filtersettings);
-  res.set('X-Location', JSON.stringify(filterSettings));
-  renderNoteListReactTree(res, {
-    filterSettings: {
-      searchText: filterSettings.searchText,
-      filterFavorites: filterSettings.filterFavorites,
-    },
-  });
+    const filterSettings = JSON.parse(req.query.filtersettings);
+    res.set('X-Location', JSON.stringify(filterSettings));
+    renderNoteListReactTree(res, {
+        filterSettings: {
+            searchText: filterSettings.searchText,
+            filterFavorites: filterSettings.filterFavorites,
+        },
+    });
 }
 
 app.get('/react', function(req: any, res: any) {
@@ -148,7 +146,7 @@ app.get('/react', function(req: any, res: any) {
 });
 
 app.get('/react/notelist', function(req: any, res: any) {
-  sendNoteListResponse(req, res);
+    sendNoteListResponse(req, res);
 });
 
 const NOTES_PATH = path.resolve(__dirname, '../../notes');
@@ -194,22 +192,22 @@ app.put(
 
         await pool.query(query, params);
 
-    if (req.body.body) {
-      await writeFile(
-        path.resolve(NOTES_PATH, `${updatedId}.md`),
-        req.body.body,
-        'utf8'
-      );
-    }
+        if (req.body.body) {
+            await writeFile(
+                path.resolve(NOTES_PATH, `${updatedId}.md`),
+                req.body.body,
+                'utf8'
+            );
+        }
 
-    if (!!req.query.location) {
-      sendLocationResponse(req, res, null);
-    } else if (!!req.query.filtersettings) {
-      sendNoteListResponse(req, res);
-    } else {
-      throw Error('No valid query parameter set');
-    }
-  })
+        if (!!req.query.location) {
+            sendLocationResponse(req, res, null);
+        } else if (!!req.query.filtersettings) {
+            sendNoteListResponse(req, res);
+        } else {
+            throw Error('No valid query parameter set');
+        }
+    })
 );
 
 app.delete(

@@ -20,10 +20,10 @@ interface NoteProps {
 }
 
 const Note: React.FC<NoteProps> = ({selectedId, isEditing}) => {
-  const note =
-    selectedId != null
-      ? fetch(`http://localhost:4000/notes/${selectedId}`).json()
-      : null;
+    const note =
+        selectedId != null
+            ? fetch(`http://localhost:4000/notes/${selectedId}`).json()
+            : null;
 
     if (note === null) {
         if (isEditing) {

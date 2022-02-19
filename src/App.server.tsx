@@ -26,9 +26,7 @@ interface AppProps {
 }
 
 const App: React.FC<AppProps> = ({location}) => {
-  const {selectedId, isEditing,
-        showStatistics,
-    } = location;
+    const {selectedId, isEditing, showStatistics} = location;
     return (
         <div className="main">
             <section className="col sidebar">
@@ -46,16 +44,16 @@ const App: React.FC<AppProps> = ({location}) => {
                 <nav>
                     <Suspense fallback={<NoteListSkeleton />}>
                         <ClientApp />
-          </Suspense>
-        </nav>
-        <ShowStatisticsButton />
-      </section>
-      <section key={selectedId} className="col note-viewer">
-        {showStatistics ? (
-          <Suspense fallback={<NoteSkeleton isEditing={false} />}>
-            <Statistics />
-          </Suspense>
-        ) : (
+                    </Suspense>
+                </nav>
+                <ShowStatisticsButton />
+            </section>
+            <section key={selectedId} className="col note-viewer">
+                {showStatistics ? (
+                    <Suspense fallback={<NoteSkeleton isEditing={false} />}>
+                        <Statistics />
+                    </Suspense>
+                ) : (
                     <Suspense fallback={<NoteSkeleton isEditing={isEditing} />}>
                         <Note selectedId={selectedId} isEditing={isEditing} />
                     </Suspense>
