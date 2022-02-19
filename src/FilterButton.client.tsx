@@ -3,7 +3,7 @@ import {useTransition} from 'react';
 import {useFilterSettings} from './FilterSettingsContext.client';
 
 const FilterButton: React.FC = () => {
-  const [isPending, startTransition] = useTransition();
+    const [isPending, startTransition] = useTransition();
   const {filterSettings, setFilterSettings} = useFilterSettings();
 
   return (

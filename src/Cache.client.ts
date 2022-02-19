@@ -13,28 +13,30 @@ import {createFromFetch} from 'react-server-dom-webpack';
 import {IFilterSettings, ILocation, LocationCache, Response} from './types';
 
 function createResponseCache(): LocationCache {
-  return new Map<string, Response>();
+    return new Map<string, Response>();
 }
 
 export function useRefresh() {
-  const refreshCache = unstable_useCacheRefresh();
-  return function refresh(key: string, seededResponse: ILocation) {
-    refreshCache(createResponseCache, new Map([[key, seededResponse]]));
-  };
+    const refreshCache = unstable_useCacheRefresh();
+    return function refresh(key: string, seededResponse: ILocation) {
+        refreshCache(createResponseCache, new Map([[key, seededResponse]]));
+    };
 }
 
 export function useLocationServerResponse(location: ILocation) {
-  const key = JSON.stringify(location);
-  const cache = unstable_getCacheForType(createResponseCache) as LocationCache;
-  let response = cache.get(key);
-  if (response !== undefined) {
-    return response;
-  }
-  const fetchResponse = createFromFetch(
-    fetch('/react?location=' + encodeURIComponent(key))
-  ) as Response;
-  cache.set(key, fetchResponse);
-  return fetchResponse;
+    const key = JSON.stringify(location);
+    const cache = unstable_getCacheForType(
+        createResponseCache
+    ) as LocationCache;
+    let response = cache.get(key);
+    if (response !== undefined) {
+        return response;
+    }
+    const fetchResponse = createFromFetch(
+        fetch('/react?location=' + encodeURIComponent(key))
+    ) as Response;
+    cache.set(key, fetchResponse);
+    return fetchResponse;
 }
 
 export function useFilterSettingsServerResponse(location: IFilterSettings) {

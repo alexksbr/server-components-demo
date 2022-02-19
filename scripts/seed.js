@@ -22,9 +22,9 @@ const now = new Date();
 const startOfThisYear = startOfYear(now);
 // Thanks, https://stackoverflow.com/a/9035732
 function randomDateBetween(start, end) {
-  return new Date(
-    start.getTime() + Math.random() * (end.getTime() - start.getTime())
-  );
+    return new Date(
+        start.getTime() + Math.random() * (end.getTime() - start.getTime())
+    );
 }
 
 const dropTableStatement = 'DROP TABLE IF EXISTS notes;';
@@ -40,57 +40,61 @@ const insertNoteStatement = `INSERT INTO notes(title, body, favorite, created_at
   VALUES ($1, $2, $3, $4, $4)
   RETURNING *`;
 const seedData = [
-  [
-    'Meeting Notes',
-    'This is an example note. It contains **Markdown**!',
-    true,
-    randomDateBetween(startOfThisYear, now),
-  ],
-  [
-    'Make a thing',
-    `It's very easy to make some words **bold** and other words *italic* with
+    [
+        'Meeting Notes',
+        'This is an example note. It contains **Markdown**!',
+        true,
+        randomDateBetween(startOfThisYear, now),
+    ],
+    [
+        'Make a thing',
+        `It's very easy to make some words **bold** and other words *italic* with
 Markdown. You can even [link to React's website!](https://www.reactjs.org).`,
-    false,
-    randomDateBetween(startOfThisYear, now),
-  ],
-  [
-    'A note with a very long title because sometimes you need more words',
-    `You can write all kinds of [amazing](https://en.wikipedia.org/wiki/The_Amazing)
+        false,
+        randomDateBetween(startOfThisYear, now),
+    ],
+    [
+        'A note with a very long title because sometimes you need more words',
+        `You can write all kinds of [amazing](https://en.wikipedia.org/wiki/The_Amazing)
 notes in this app! These note live on the server in the \`notes\` folder.
 
 ![This app is powered by React](https://upload.wikimedia.org/wikipedia/commons/thumb/1/18/React_Native_Logo.png/800px-React_Native_Logo.png)`,
-    false,
-    randomDateBetween(startOfThisYear, now),
-  ],
-  ['I wrote this note today', 'It was an excellent note.', true, now],
+        false,
+        randomDateBetween(startOfThisYear, now),
+    ],
+    ['I wrote this note today', 'It was an excellent note.', true, now],
 ];
 
 async function seed() {
-  await pool.query(dropTableStatement);
-  await pool.query(createTableStatement);
-  const res = await Promise.all(
-    seedData.map((row) => pool.query(insertNoteStatement, row))
-  );
+    await pool.query(dropTableStatement);
+    await pool.query(createTableStatement);
+    const res = await Promise.all(
+        seedData.map((row) => pool.query(insertNoteStatement, row))
+    );
 
-  const oldNotes = await readdir(path.resolve(NOTES_PATH));
-  await Promise.all(
-    oldNotes
-      .filter((filename) => filename.endsWith('.md'))
-      .map((filename) => unlink(path.resolve(NOTES_PATH, filename)))
-  );
+    const oldNotes = await readdir(path.resolve(NOTES_PATH));
+    await Promise.all(
+        oldNotes
+            .filter((filename) => filename.endsWith('.md'))
+            .map((filename) => unlink(path.resolve(NOTES_PATH, filename)))
+    );
 
-  await Promise.all(
-    res.map(({rows}) => {
-      const id = rows[0].id;
-      const content = rows[0].body;
-      const data = new Uint8Array(Buffer.from(content));
-      return writeFile(path.resolve(NOTES_PATH, `${id}.md`), data, (err) => {
-        if (err) {
-          throw err;
-        }
-      });
-    })
-  );
+    await Promise.all(
+        res.map(({rows}) => {
+            const id = rows[0].id;
+            const content = rows[0].body;
+            const data = new Uint8Array(Buffer.from(content));
+            return writeFile(
+                path.resolve(NOTES_PATH, `${id}.md`),
+                data,
+                (err) => {
+                    if (err) {
+                        throw err;
+                    }
+                }
+            );
+        })
+    );
 }
 
 seed();

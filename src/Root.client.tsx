@@ -14,40 +14,40 @@ import {LocationContext} from './LocationContext.client';
 import {ILocation} from './types';
 
 const Root = () => {
-  return (
-    <Suspense fallback={null}>
-      <ErrorBoundary FallbackComponent={Error}>
-        <Content />
-      </ErrorBoundary>
-    </Suspense>
-  );
+    return (
+        <Suspense fallback={null}>
+            <ErrorBoundary FallbackComponent={Error}>
+                <Content />
+            </ErrorBoundary>
+        </Suspense>
+    );
 };
 
 const Content = () => {
-  const [location, setLocation] = useState<ILocation>({
-    selectedId: null,
-    isEditing: false,
-    showStatistics: false
-  });
-  const response = useLocationServerResponse(location);
-  return (
-    <LocationContext.Provider value={{location, setLocation}}>
-      {response.readRoot()}
-    </LocationContext.Provider>
-  );
+    const [location, setLocation] = useState<ILocation>({
+        selectedId: null,
+        isEditing: false,
+        showStatistics: false,
+    });
+    const response = useLocationServerResponse(location);
+    return (
+        <LocationContext.Provider value={{location, setLocation}}>
+            {response.readRoot()}
+        </LocationContext.Provider>
+    );
 };
 
 interface ErrorProps {
-  error: Error;
+    error: Error;
 }
 
 const Error: React.FC<ErrorProps> = ({error}) => {
-  return (
-    <div>
-      <h1>Application Error</h1>
-      <pre style={{whiteSpace: 'pre-wrap'}}>{error.stack}</pre>
-    </div>
-  );
+    return (
+        <div>
+            <h1>Application Error</h1>
+            <pre style={{whiteSpace: 'pre-wrap'}}>{error.stack}</pre>
+        </div>
+    );
 };
 
 export default Root;

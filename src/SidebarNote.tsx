@@ -16,29 +16,31 @@ import ClientSidebarNote from './SidebarNote.client';
 import {Note} from './types';
 
 interface SidebarNoteProps {
-  note: Note;
+    note: Note;
 }
 
 const SidebarNote: React.FC<SidebarNoteProps> = ({note}) => {
-  const updatedAt = new Date(note.updated_at);
-  const lastUpdatedAt = isToday(updatedAt)
-    ? format(updatedAt, 'h:mm bb')
-    : format(updatedAt, 'M/d/yy');
-  const summary = excerpts(marked(note.body), {words: 20});
-  return (
-    <ClientSidebarNote
-      id={note.id}
-      title={note.title}
-      favorite={note.favorite}
-      expandedChildren={
-        <p className="sidebar-note-excerpt">{summary || <i>(No content)</i>}</p>
-      }>
-      <header className="sidebar-note-header">
-        <strong>{note.title}</strong>
-        <small>{lastUpdatedAt}</small>
-      </header>
-    </ClientSidebarNote>
-  );
+    const updatedAt = new Date(note.updated_at);
+    const lastUpdatedAt = isToday(updatedAt)
+        ? format(updatedAt, 'h:mm bb')
+        : format(updatedAt, 'M/d/yy');
+    const summary = excerpts(marked(note.body), {words: 20});
+    return (
+        <ClientSidebarNote
+            id={note.id}
+            title={note.title}
+            favorite={note.favorite}
+            expandedChildren={
+                <p className="sidebar-note-excerpt">
+                    {summary || <i>(No content)</i>}
+                </p>
+            }>
+            <header className="sidebar-note-header">
+                <strong>{note.title}</strong>
+                <small>{lastUpdatedAt}</small>
+            </header>
+        </ClientSidebarNote>
+    );
 };
 
 export default SidebarNote;

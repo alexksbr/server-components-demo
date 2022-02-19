@@ -7,75 +7,102 @@
  */
 
 const NoteEditorSkeleton: React.FC = () => {
-  return (
-    <div
-      className="note-editor skeleton-container"
-      role="progressbar"
-      aria-busy="true">
-      <div className="note-editor-form">
-        <div className="skeleton v-stack" style={{height: '3rem'}} />
-        <div className="skeleton v-stack" style={{height: '100%'}} />
-      </div>
-      <div className="note-editor-preview">
-        <div className="note-editor-menu">
-          <div
-            className="skeleton skeleton--button"
-            style={{width: '8em', height: '2.5em'}}
-          />
-          <div
-            className="skeleton skeleton--button"
-            style={{width: '8em', height: '2.5em', marginInline: '12px 0'}}
-          />
-        </div>
+    return (
         <div
-          className="note-title skeleton"
-          style={{height: '3rem', width: '65%', marginInline: '12px 1em'}}
-        />
-        <div className="note-preview">
-          <div className="skeleton v-stack" style={{height: '1.5em'}} />
-          <div className="skeleton v-stack" style={{height: '1.5em'}} />
-          <div className="skeleton v-stack" style={{height: '1.5em'}} />
-          <div className="skeleton v-stack" style={{height: '1.5em'}} />
-          <div className="skeleton v-stack" style={{height: '1.5em'}} />
+            className="note-editor skeleton-container"
+            role="progressbar"
+            aria-busy="true">
+            <div className="note-editor-form">
+                <div className="skeleton v-stack" style={{height: '3rem'}} />
+                <div className="skeleton v-stack" style={{height: '100%'}} />
+            </div>
+            <div className="note-editor-preview">
+                <div className="note-editor-menu">
+                    <div
+                        className="skeleton skeleton--button"
+                        style={{width: '8em', height: '2.5em'}}
+                    />
+                    <div
+                        className="skeleton skeleton--button"
+                        style={{
+                            width: '8em',
+                            height: '2.5em',
+                            marginInline: '12px 0',
+                        }}
+                    />
+                </div>
+                <div
+                    className="note-title skeleton"
+                    style={{
+                        height: '3rem',
+                        width: '65%',
+                        marginInline: '12px 1em',
+                    }}
+                />
+                <div className="note-preview">
+                    <div
+                        className="skeleton v-stack"
+                        style={{height: '1.5em'}}
+                    />
+                    <div
+                        className="skeleton v-stack"
+                        style={{height: '1.5em'}}
+                    />
+                    <div
+                        className="skeleton v-stack"
+                        style={{height: '1.5em'}}
+                    />
+                    <div
+                        className="skeleton v-stack"
+                        style={{height: '1.5em'}}
+                    />
+                    <div
+                        className="skeleton v-stack"
+                        style={{height: '1.5em'}}
+                    />
+                </div>
+            </div>
         </div>
-      </div>
-    </div>
-  );
+    );
 };
 
 function NotePreviewSkeleton() {
-  return (
-    <div
-      className="note skeleton-container"
-      role="progressbar"
-      aria-busy="true">
-      <div className="note-header">
+    return (
         <div
-          className="note-title skeleton"
-          style={{height: '3rem', width: '65%', marginInline: '12px 1em'}}
-        />
-        <div
-          className="skeleton skeleton--button"
-          style={{width: '8em', height: '2.5em'}}
-        />
-      </div>
-      <div className="note-preview">
-        <div className="skeleton v-stack" style={{height: '1.5em'}} />
-        <div className="skeleton v-stack" style={{height: '1.5em'}} />
-        <div className="skeleton v-stack" style={{height: '1.5em'}} />
-        <div className="skeleton v-stack" style={{height: '1.5em'}} />
-        <div className="skeleton v-stack" style={{height: '1.5em'}} />
-      </div>
-    </div>
-  );
+            className="note skeleton-container"
+            role="progressbar"
+            aria-busy="true">
+            <div className="note-header">
+                <div
+                    className="note-title skeleton"
+                    style={{
+                        height: '3rem',
+                        width: '65%',
+                        marginInline: '12px 1em',
+                    }}
+                />
+                <div
+                    className="skeleton skeleton--button"
+                    style={{width: '8em', height: '2.5em'}}
+                />
+            </div>
+            <div className="note-preview">
+                <div className="skeleton v-stack" style={{height: '1.5em'}} />
+                <div className="skeleton v-stack" style={{height: '1.5em'}} />
+                <div className="skeleton v-stack" style={{height: '1.5em'}} />
+                <div className="skeleton v-stack" style={{height: '1.5em'}} />
+                <div className="skeleton v-stack" style={{height: '1.5em'}} />
+            </div>
+        </div>
+    );
 }
 
 interface NoteSkeletonProps {
-  isEditing: boolean;
+    isEditing: boolean;
 }
 
 const NoteSkeleton: React.FC<NoteSkeletonProps> = ({isEditing}) => {
-  return isEditing ? <NoteEditorSkeleton /> : <NotePreviewSkeleton />;
+    return isEditing ? <NoteEditorSkeleton /> : <NotePreviewSkeleton />;
 };
 
 export default NoteSkeleton;
