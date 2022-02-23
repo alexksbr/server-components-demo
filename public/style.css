@@ -287,6 +287,21 @@ hr {
     top: 32px;
 }
 
+.statistics-button {
+    margin-left: 16px;
+    box-shadow: 5px 5px 5px #65676b;
+    position: absolute;
+    bottom: 32px;
+    background: #037dba;
+    color: white;
+    border: none;
+}
+
+.statistics-header {
+    position: absolute;
+    top: 32px;
+}
+
 ul.notes-list {
     padding: 16px 0;
 }
