@@ -9,7 +9,14 @@
 import {useState, useRef, useEffect, useTransition, ReactElement} from 'react';
 
 import {useLocation} from './LocationContext.client';
-import {useMutation, useNavigation} from './util';
+import {
+    useLocationMutation,
+    useLocationNavigation,
+    useFilterSettingsNavigation,
+    useFilterSettingsMutation,
+} from './util';
+import {IFilterSettings} from './types';
+import {useFilterSettings} from './FilterSettingsContext.client';
 
 interface SidebarNoteProps {
     id: number;
@@ -25,8 +32,9 @@ const SidebarNote: React.FC<SidebarNoteProps> = ({
     children,
     expandedChildren,
 }) => {
-    const {isNavigating, navigate} = useNavigation();
+    const {isNavigating, navigate} = useFilterSettingsNavigation();
     const {location, setLocation} = useLocation();
+    const {filterSettings, setFilterSettings} = useFilterSettings();
     const [isPending, startTransition] = useTransition();
     const [isExpanded, setIsExpanded] = useState(false);
     const isActive = id === location.selectedId;
@@ -41,21 +49,18 @@ const SidebarNote: React.FC<SidebarNoteProps> = ({
         }
     }, [title]);
 
-    const {performMutation: updateNote, isSaving} = useMutation({
+    const {performMutation: updateNote, isSaving} = useFilterSettingsMutation({
         endpoint: `/notes/${id}`,
         method: 'PUT',
     });
 
     async function toggleFavorite() {
         const payload = {favorite: !favorite};
-        const requestedLocation = {
-            selectedId: id,
-            isEditing: false,
-            searchText: location.searchText,
-            filterFavorites: location.filterFavorites,
-            showStatistics: location.showStatistics,
+        const newFilterSettings: IFilterSettings = {
+            filterFavorites: filterSettings.filterFavorites,
+            searchText: filterSettings.searchText,
         };
-        const response = await updateNote(payload, requestedLocation);
+        const response = await updateNote(payload, newFilterSettings);
 
         if (!response) {
             throw new Error(`Something went wrong when saving note ${id}`);
@@ -93,8 +98,6 @@ const SidebarNote: React.FC<SidebarNoteProps> = ({
                             setLocation((loc) => ({
                                 selectedId: id,
                                 isEditing: false,
-                                searchText: loc.searchText,
-                                filterFavorites: loc.filterFavorites,
                                 showStatistics: false,
                             }));
                     });

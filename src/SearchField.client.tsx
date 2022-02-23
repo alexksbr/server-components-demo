@@ -8,13 +8,13 @@
 
 import {useState, useTransition} from 'react';
 
-import {useLocation} from './LocationContext.client';
 import Spinner from './Spinner';
+import {useFilterSettings} from './FilterSettingsContext.client';
 
 const SearchField: React.FC = () => {
     const [text, setText] = useState('');
     const [isSearching, startSearching] = useTransition();
-    const {setLocation} = useLocation();
+    const {setFilterSettings} = useFilterSettings();
     return (
         <form
             className="search"
@@ -31,9 +31,9 @@ const SearchField: React.FC = () => {
                     const newText = e.target.value;
                     setText(newText);
                     startSearching(() => {
-                        setLocation &&
-                            setLocation((loc) => ({
-                                ...loc,
+                        setFilterSettings &&
+                            setFilterSettings((filterSettings) => ({
+                                ...filterSettings,
                                 searchText: newText,
                             }));
                     });

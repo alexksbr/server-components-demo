@@ -8,14 +8,15 @@
 
 import {db} from './db.server';
 import SidebarNote from './SidebarNote';
+import {IFilterSettings} from './types';
 
 interface NoteListProps {
-    searchText: string;
-    filterFavorites: boolean;
+    filterSettings: IFilterSettings;
 }
 
-const NoteList: React.FC<NoteListProps> = ({searchText, filterFavorites}) => {
+const NoteList: React.FC<NoteListProps> = ({filterSettings}) => {
     // const notes = fetch('http://localhost:4000/notes').json();
+    const {filterFavorites, searchText} = filterSettings;
 
     // WARNING: This is for demo purposes only.
     // We don't encourage this in real apps. There are far safer ways to access

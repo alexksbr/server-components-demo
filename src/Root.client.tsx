@@ -9,7 +9,7 @@
 import {useState, Suspense} from 'react';
 import {ErrorBoundary} from 'react-error-boundary';
 
-import {useServerResponse} from './Cache.client';
+import {useLocationServerResponse} from './Cache.client';
 import {LocationContext} from './LocationContext.client';
 import {ILocation} from './types';
 
@@ -27,11 +27,9 @@ const Content = () => {
     const [location, setLocation] = useState<ILocation>({
         selectedId: null,
         isEditing: false,
-        searchText: '',
-        filterFavorites: false,
         showStatistics: false,
     });
-    const response = useServerResponse(location);
+    const response = useLocationServerResponse(location);
     return (
         <LocationContext.Provider value={{location, setLocation}}>
             {response.readRoot()}
