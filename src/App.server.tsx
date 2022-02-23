@@ -15,15 +15,15 @@ import SearchField from './SearchField.client';
 import NoteSkeleton from './NoteSkeleton';
 import NoteListSkeleton from './NoteListSkeleton';
 import {ILocation} from './types';
-import ShowStatisticsButton from './ShowStatisticsButton';
-import Statistics from './Statistics';
+import ShowStatisticsButton from './ShowStatisticsButton.client';
+import Statistics from './Statistics.server';
 
 interface AppProps {
     location: ILocation;
 }
 
 const App: React.FC<AppProps> = ({location}) => {
-    const {selectedId, isEditing, searchText} = location;
+    const {selectedId, isEditing, searchText, showStatistics} = location;
     return (
         <div className="main">
             <section className="col sidebar">
@@ -47,20 +47,17 @@ const App: React.FC<AppProps> = ({location}) => {
                         <NoteList searchText={searchText} />
                     </Suspense>
                 </nav>
-                {/* 🖌 TODO: the statistics button needs some functionality, check it out! */}
                 <ShowStatisticsButton />
             </section>
             <section key={selectedId} className="col note-viewer">
-                {
-                    // 🖌 TODO: We need to display a statistics page depending on our app state...
-                    // Also the statistics component needs some love ❤️, check it out!
-                    // Oh, also this might be a good place for suspense. If you don't mind?!
-                    null === 1 ? (
-                      <Statistics />
+                {showStatistics ? (
+                    <Suspense fallback={<NoteSkeleton isEditing={false} />}>
+                        <Statistics />
+                    </Suspense>
                 ) : (
-                  <Suspense fallback={<NoteSkeleton isEditing={isEditing} />}>
-                      <Note selectedId={selectedId} isEditing={isEditing} />
-                  </Suspense>
+                    <Suspense fallback={<NoteSkeleton isEditing={isEditing} />}>
+                        <Note selectedId={selectedId} isEditing={isEditing} />
+                    </Suspense>
                 )}
             </section>
         </div>
