@@ -15,6 +15,8 @@ import SearchField from './SearchField.client';
 import NoteSkeleton from './NoteSkeleton';
 import NoteListSkeleton from './NoteListSkeleton';
 import {ILocation} from './types';
+import ShowStatisticsButton from './ShowStatisticsButton';
+import Statistics from './Statistics';
 
 interface AppProps {
     location: ILocation;
@@ -45,11 +47,21 @@ const App: React.FC<AppProps> = ({location}) => {
                         <NoteList searchText={searchText} />
                     </Suspense>
                 </nav>
+                {/* 🖌 TODO: the statistics button needs some functionality, check it out! */}
+                <ShowStatisticsButton />
             </section>
             <section key={selectedId} className="col note-viewer">
-                <Suspense fallback={<NoteSkeleton isEditing={isEditing} />}>
-                    <Note selectedId={selectedId} isEditing={isEditing} />
-                </Suspense>
+                {
+                    // 🖌 TODO: We need to display a statistics page depending on our app state...
+                    // Also the statistics component needs some love ❤️, check it out!
+                    // Oh, also this might be a good place for suspense. If you don't mind?!
+                    null === 1 ? (
+                      <Statistics />
+                ) : (
+                  <Suspense fallback={<NoteSkeleton isEditing={isEditing} />}>
+                      <Note selectedId={selectedId} isEditing={isEditing} />
+                  </Suspense>
+                )}
             </section>
         </div>
     );
