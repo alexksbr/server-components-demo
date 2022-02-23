@@ -41,14 +41,15 @@ const NoteEditor: React.FC<NoteEditorProps> = ({
         method: 'DELETE',
     });
 
-    async function handleSave() {
-        const payload = {title, body};
-        const requestedLocation = {
-            selectedId: noteId,
-            isEditing: false,
-            searchText: location.searchText,
-        };
-        const response = await saveNote(payload, requestedLocation);
+  async function handleSave() {
+    const payload = {title, body};
+    const requestedLocation = {
+      selectedId: noteId,
+      isEditing: false,
+      searchText: location.searchText,
+      showStatistics: location.showStatistics,
+    };
+    const response = await saveNote(payload, requestedLocation);
 
         if (!response) {
             throw new Error(`Something went wrong when saving note ${noteId}`);
@@ -57,14 +58,15 @@ const NoteEditor: React.FC<NoteEditorProps> = ({
         navigate(response);
     }
 
-    async function handleDelete() {
-        const payload = {};
-        const requestedLocation = {
-            selectedId: null,
-            isEditing: false,
-            searchText: location.searchText,
-        };
-        const response = await deleteNote(payload, requestedLocation);
+  async function handleDelete() {
+    const payload = {};
+    const requestedLocation = {
+      selectedId: null,
+      isEditing: false,
+      searchText: location.searchText,
+      showStatistics: location.showStatistics,
+    };
+    const response = await deleteNote(payload, requestedLocation);
 
         if (!response) {
             throw new Error(

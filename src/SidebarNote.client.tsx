@@ -6,7 +6,13 @@
  *
  */
 
-import React, {ReactElement, useEffect, useRef, useState, useTransition} from 'react';
+import React, {
+    ReactElement,
+    useEffect,
+    useRef,
+    useState,
+    useTransition,
+} from 'react';
 
 import {useLocation} from './LocationContext.client';
 
@@ -67,6 +73,7 @@ const SidebarNote: React.FC<SidebarNoteProps> = ({
                                 selectedId: id,
                                 isEditing: false,
                                 searchText: loc.searchText,
+                                showStatistics: false,
                             }));
                     });
                 }}>

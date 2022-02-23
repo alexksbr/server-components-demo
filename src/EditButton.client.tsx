@@ -32,6 +32,7 @@ const EditButton: React.FC<EditButtonProps> = ({noteId, children}) => {
                             selectedId: noteId,
                             isEditing: true,
                             searchText: loc.searchText,
+                            showStatistics: loc.showStatistics,
                         }));
                 });
             }}

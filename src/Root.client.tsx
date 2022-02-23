@@ -28,6 +28,7 @@ const Content = () => {
         selectedId: null,
         isEditing: false,
         searchText: '',
+        showStatistics: false,
     });
     const response = useServerResponse(location);
     return (
