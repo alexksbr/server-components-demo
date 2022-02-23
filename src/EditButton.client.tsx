@@ -11,34 +11,34 @@ import {useTransition} from 'react';
 import {useLocation} from './LocationContext.client';
 
 interface EditButtonProps {
-  noteId: number | null;
+    noteId: number | null;
 }
 
 const EditButton: React.FC<EditButtonProps> = ({noteId, children}) => {
-  const {setLocation} = useLocation();
-  const [isPending, startTransition] = useTransition();
-  const isDraft = noteId == null;
-  return (
-    <button
-      className={[
-        'edit-button',
-        isDraft ? 'edit-button--solid' : 'edit-button--outline',
-      ].join(' ')}
-      disabled={isPending}
-      onClick={() => {
-        startTransition(() => {
-          setLocation &&
-            setLocation((loc) => ({
-              selectedId: noteId,
-              isEditing: true,
-              searchText: loc.searchText,
-            }));
-        });
-      }}
-      role="menuitem">
-      {children}
-    </button>
-  );
+    const {setLocation} = useLocation();
+    const [isPending, startTransition] = useTransition();
+    const isDraft = noteId == null;
+    return (
+        <button
+            className={[
+                'edit-button',
+                isDraft ? 'edit-button--solid' : 'edit-button--outline',
+            ].join(' ')}
+            disabled={isPending}
+            onClick={() => {
+                startTransition(() => {
+                    setLocation &&
+                        setLocation((loc) => ({
+                            selectedId: noteId,
+                            isEditing: true,
+                            searchText: loc.searchText,
+                        }));
+                });
+            }}
+            role="menuitem">
+            {children}
+        </button>
+    );
 };
 
 export default EditButton;
