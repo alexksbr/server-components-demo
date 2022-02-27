@@ -19,15 +19,20 @@ import {useLocation} from './LocationContext.client';
 interface SidebarNoteProps {
     id: number;
     title: string;
+    favorite: boolean;
     expandedChildren: ReactElement;
 }
 
 const SidebarNote: React.FC<SidebarNoteProps> = ({
     id,
     title,
+    favorite,
     children,
     expandedChildren,
 }) => {
+    const isNavigating = false;
+    const isSaving = false;
+
     const {location, setLocation} = useLocation();
     const [isPending, startTransition] = useTransition();
     const [isExpanded, setIsExpanded] = useState(false);
@@ -42,6 +47,15 @@ const SidebarNote: React.FC<SidebarNoteProps> = ({
             itemRef.current && itemRef.current.classList.add('flash');
         }
     }, [title]);
+
+    // 🖌 TODO: Okay, this is the onClick handler of the favorite-toggle-button, which we need to implement
+    // This means, we have to store information from the client back on the server now. Another place where we have
+    // similar functionality can be found in the NoteEditor.client.tsx who also manipulates the note on the server.
+    // ℹ️ Interesting hooks are useNavigation and useMutation.
+    // ℹ️ You do not need to change the endpoint in api.server.ts, this is already implemented.
+    // 🖌 TODO: After implementing the function, toggling the favorite icon should work. Next, we want to implement the filter functionality
+    // But first, let's jump into LocationContext.client.ts
+    function toggleFavorite() {}
 
     return (
         <div
@@ -74,6 +88,7 @@ const SidebarNote: React.FC<SidebarNoteProps> = ({
                                 isEditing: false,
                                 searchText: loc.searchText,
                                 showStatistics: false,
+                                filterFavorites: false,
                             }));
                     });
                 }}>
@@ -100,6 +115,20 @@ const SidebarNote: React.FC<SidebarNoteProps> = ({
                         alt="Expand"
                     />
                 )}
+            </button>
+            <button
+                className="sidebar-note-toggle-favorite"
+                onClick={toggleFavorite}
+                disabled={isNavigating || isSaving}
+                style={{
+                    opacity: isNavigating || isSaving ? '0.5' : '1.0',
+                }}>
+                <img
+                    src={favorite ? 'star-fill.svg' : 'star-line.svg'}
+                    width="20px"
+                    height="20px"
+                    alt="Expand"
+                />
             </button>
             {isExpanded && expandedChildren}
         </div>

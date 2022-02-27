@@ -14,7 +14,7 @@ import NotePreview from './NotePreview';
 import {useRefresh} from './Cache.client';
 import {useLocation} from './LocationContext.client';
 import {ILocation} from './types';
-import {useMutation} from './util';
+import {useMutation, useNavigation} from './util';
 
 interface NoteEditorProps {
     noteId: number | null;
@@ -27,7 +27,7 @@ const NoteEditor: React.FC<NoteEditorProps> = ({
     initialTitle,
     initialBody,
 }) => {
-    const refresh = useRefresh();
+    const {navigate} = useNavigation();
     const [title, setTitle] = useState(initialTitle);
     const [body, setBody] = useState(initialBody);
     const {location, setLocation} = useLocation();
@@ -41,15 +41,15 @@ const NoteEditor: React.FC<NoteEditorProps> = ({
         method: 'DELETE',
     });
 
-  async function handleSave() {
-    const payload = {title, body};
-    const requestedLocation = {
-      selectedId: noteId,
-      isEditing: false,
-      searchText: location.searchText,
-      showStatistics: location.showStatistics,
-    };
-    const response = await saveNote(payload, requestedLocation);
+    async function handleSave() {
+        const payload = {title, body};
+        const requestedLocation = {
+            selectedId: noteId,
+            isEditing: false,
+            searchText: location.searchText,
+            showStatistics: location.showStatistics,
+        };
+        const response = await saveNote(payload, requestedLocation);
 
         if (!response) {
             throw new Error(`Something went wrong when saving note ${noteId}`);
@@ -58,15 +58,15 @@ const NoteEditor: React.FC<NoteEditorProps> = ({
         navigate(response);
     }
 
-  async function handleDelete() {
-    const payload = {};
-    const requestedLocation = {
-      selectedId: null,
-      isEditing: false,
-      searchText: location.searchText,
-      showStatistics: location.showStatistics,
-    };
-    const response = await deleteNote(payload, requestedLocation);
+    async function handleDelete() {
+        const payload = {};
+        const requestedLocation = {
+            selectedId: null,
+            isEditing: false,
+            searchText: location.searchText,
+            showStatistics: location.showStatistics,
+        };
+        const response = await deleteNote(payload, requestedLocation);
 
         if (!response) {
             throw new Error(
@@ -75,21 +75,6 @@ const NoteEditor: React.FC<NoteEditorProps> = ({
         }
 
         navigate(response);
-    }
-
-    function navigate(response: Response) {
-        const cacheKey = response.headers.get('X-Location');
-
-        if (!cacheKey) {
-            throw new Error('X-Location header is not set');
-        }
-
-        const nextLocation = JSON.parse(cacheKey);
-        const seededResponse = createFromReadableStream(response.body);
-        startNavigating(() => {
-            refresh(cacheKey, seededResponse);
-            setLocation && setLocation(nextLocation);
-        });
     }
 
     const isDraft = noteId === null;

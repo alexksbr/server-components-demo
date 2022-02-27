@@ -24,6 +24,13 @@ const NoteList: React.FC<NoteListProps> = ({searchText}) => {
         ['%' + searchText + '%']
     ).rows;
 
+    // 🖌 TODO: remove the line above and uncomment the following lines to make the filtering work. You might have to add a parameter here.
+    // const query = filterFavorites
+    //     ? `select * from notes where title ilike $1 AND favorite=true order by id desc`
+    //     : `select * from notes where title ilike $1 order by id desc`;
+    //
+    // const notes = db.query(query, ['%' + searchText + '%']).rows;
+
     // Now let's see how the Suspense boundary above lets us not block on this.
     // fetch('http://localhost:4000/sleep/3000');
 

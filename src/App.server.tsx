@@ -17,11 +17,14 @@ import NoteListSkeleton from './NoteListSkeleton';
 import {ILocation} from './types';
 import ShowStatisticsButton from './ShowStatisticsButton.client';
 import Statistics from './Statistics.server';
+import FilterButtonClient from './FilterButton.client';
 
 interface AppProps {
     location: ILocation;
 }
 
+// 🖌 TODO: We need to add functionality to the star icon. If a user clicks on the icon, we want to mark that note as a favorite
+// In order to do that, let's jump into SidebarNote.client.tsx
 const App: React.FC<AppProps> = ({location}) => {
     const {selectedId, isEditing, searchText, showStatistics} = location;
     return (
@@ -40,6 +43,7 @@ const App: React.FC<AppProps> = ({location}) => {
                 </section>
                 <section className="sidebar-menu" role="menubar">
                     <SearchField />
+                    <FilterButtonClient />
                     <EditButton noteId={null}>New</EditButton>
                 </section>
                 <nav>
