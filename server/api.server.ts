@@ -109,6 +109,7 @@ function sendResponse(req: any, res: any, redirectToId: any) {
             isEditing: location.isEditing,
             searchText: location.searchText,
             showStatistics: location.showStatistics,
+            filterFavorites: location.filterFavorites,
         },
     });
 }

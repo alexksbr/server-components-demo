@@ -18,6 +18,7 @@ const ShowStatisticsButton: React.FC = () => {
                             isEditing: loc.isEditing,
                             searchText: loc.searchText,
                             showStatistics: !location.showStatistics,
+                            filterFavorites: loc.filterFavorites,
                         }));
                 });
             }}>
