@@ -23,7 +23,7 @@ interface AppProps {
     location: ILocation;
 }
 
-// 🖌 TODO: We need to add functionality to the star icon. If a user clicks on the icon, we want to mark that note as a favorite
+// 🖌 TODO: We need to add functionality to the star icon you can see on each note in the note list. If a user clicks on the icon, we want to mark that note as a favorite
 // In order to do that, let's jump into SidebarNote.client.tsx
 const App: React.FC<AppProps> = ({location}) => {
     const {selectedId, isEditing, searchText, showStatistics} = location;
