@@ -28,7 +28,7 @@ services:
       - ./scripts:/opt/notes-app/scripts
       - ./server:/opt/notes-app/server
       - ./src:/opt/notes-app/src
-      - ./credentials.ts:/opt/notes-app/credentials.ts
+      - ./credentials.js:/opt/notes-app/credentials.js
 
 volumes:
   db:
