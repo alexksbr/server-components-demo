@@ -33,7 +33,8 @@ const SearchField: React.FC = () => {
                     startSearching(() => {
                         setLocation &&
                             setLocation((loc) => ({
-                                ...loc,
+                                selectedId: loc.selectedId,
+                                isEditing: loc.isEditing,
                                 searchText: newText,
                             }));
                     });
