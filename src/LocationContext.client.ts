@@ -16,9 +16,7 @@ export const LocationContext = createContext<{
     location: {
         selectedId: null,
         isEditing: false,
-        searchText: '',
         showStatistics: false,
-        filterFavorites: false,
     },
 });
 export function useLocation() {

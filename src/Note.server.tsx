@@ -20,6 +20,7 @@ interface NoteProps {
 }
 
 const Note: React.FC<NoteProps> = ({selectedId, isEditing}) => {
+    console.log('render Note.server.tsx ', (new Date()).getSeconds());
     const note =
         selectedId != null
             ? fetch(`http://localhost:4000/notes/${selectedId}`).json()

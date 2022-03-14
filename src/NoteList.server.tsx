@@ -10,11 +10,14 @@ import {db} from './db.server';
 import SidebarNote from './SidebarNote';
 
 interface NoteListProps {
-    searchText: string;
-    filterFavorites: boolean;
+    sidebarLocation: {
+        searchText: string;
+        filterFavorites: boolean;
+    };
 }
 
-const NoteList: React.FC<NoteListProps> = ({searchText, filterFavorites}) => {
+const NoteList: React.FC<NoteListProps> = ({sidebarLocation}) => {
+    const {searchText, filterFavorites} = sidebarLocation;
     // const notes = fetch('http://localhost:4000/notes').json();
 
     // WARNING: This is for demo purposes only.

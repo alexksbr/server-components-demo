@@ -5,7 +5,7 @@
  * LICENSE file in the root directory of this source tree.
  *
  */
-import {ILocation} from '../src/types';
+import {ILocation, ISidebarLocation} from '../src/types';
 
 const register = require('react-server-dom-webpack/node-register');
 register();
@@ -26,6 +26,7 @@ const path = require('path');
 const {Pool} = require('pg');
 const React = require('react');
 import App from '../src/App.server';
+import NoteList from '../src/NoteList.server';
 
 // Don't keep credentials in the source tree in a real app!
 const pool = new Pool(require('../credentials'));
@@ -97,6 +98,20 @@ async function renderReactTree(res: any, props: {location: ILocation}) {
     pipe(res);
 }
 
+async function renderSidebarReactTree(res: any, props: {sidebarLocation: ISidebarLocation}) {
+  await waitForWebpack();
+  const manifest = readFileSync(
+    path.resolve(__dirname, '../../build/react-client-manifest.json'),
+    'utf8'
+  );
+  const moduleMap = JSON.parse(manifest);
+  const {pipe} = renderToPipeableStream(
+    React.createElement(NoteList, props),
+    moduleMap
+  );
+  pipe(res);
+}
+
 function sendResponse(req: any, res: any, redirectToId: any) {
     const location = JSON.parse(req.query.location);
     if (redirectToId) {
@@ -107,15 +122,31 @@ function sendResponse(req: any, res: any, redirectToId: any) {
         location: {
             selectedId: location.selectedId,
             isEditing: location.isEditing,
-            searchText: location.searchText,
             showStatistics: location.showStatistics,
-            filterFavorites: location.filterFavorites,
         },
     });
 }
 
+function sendSidebarResponse(req: any, res: any, redirectToId: any) {
+  const sidebarLocation = JSON.parse(req.query.sidebarlocation);
+  if (redirectToId) {
+    sidebarLocation.selectedId = redirectToId;
+  }
+  res.set('X-Location', JSON.stringify(sidebarLocation));
+  renderSidebarReactTree(res, {
+    sidebarLocation: {
+      searchText: sidebarLocation.searchText,
+      filterFavorites: sidebarLocation.filterFavorites,
+    },
+  });
+}
+
 app.get('/react', function(req: any, res: any) {
     sendResponse(req, res, null);
+});
+
+app.get('/sidebar', function(req: any, res: any) {
+  sendSidebarResponse(req, res, null);
 });
 
 const NOTES_PATH = path.resolve(__dirname, '../../notes');

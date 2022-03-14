@@ -10,11 +10,12 @@ import {useState, useTransition} from 'react';
 
 import {useLocation} from './LocationContext.client';
 import Spinner from './Spinner';
+import {useSidebarLocation} from './SidebarLocationContext.client';
 
 const SearchField: React.FC = () => {
     const [text, setText] = useState('');
     const [isSearching, startSearching] = useTransition();
-    const {setLocation} = useLocation();
+    const {setSidebarLocation} = useSidebarLocation();
     return (
         <form
             className="search"
@@ -31,13 +32,10 @@ const SearchField: React.FC = () => {
                     const newText = e.target.value;
                     setText(newText);
                     startSearching(() => {
-                        setLocation &&
-                            setLocation((loc) => ({
-                                selectedId: loc.selectedId,
-                                isEditing: loc.isEditing,
+                        setSidebarLocation &&
+                            setSidebarLocation((loc) => ({
                                 searchText: newText,
                                 filterFavorites: loc.filterFavorites,
-                                showStatistics: loc.showStatistics,
                             }));
                     });
                 }}

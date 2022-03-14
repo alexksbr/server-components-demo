@@ -1,8 +1,9 @@
 import {useLocation} from './LocationContext.client';
 import {useTransition} from 'react';
+import {useSidebarLocation} from './SidebarLocationContext.client';
 
 const FilterButton: React.FC = () => {
-    const {location, setLocation} = useLocation();
+    const {sidebarLocation, setSidebarLocation} = useSidebarLocation();
     const [isPending, startTransition] = useTransition();
 
     return (
@@ -11,19 +12,16 @@ const FilterButton: React.FC = () => {
             disabled={isPending}
             onClick={() => {
                 startTransition(() => {
-                    setLocation &&
-                        setLocation((loc) => ({
-                            selectedId: loc.selectedId,
-                            isEditing: loc.isEditing,
+                    setSidebarLocation &&
+                        setSidebarLocation((loc) => ({
                             searchText: loc.searchText,
-                            showStatistics: loc.showStatistics,
                             filterFavorites: !loc.filterFavorites,
                         }));
                 });
             }}>
             <img
                 src={
-                    location.filterFavorites
+                    sidebarLocation.filterFavorites
                         ? 'filter-fill.svg'
                         : 'filter-line.svg'
                 }

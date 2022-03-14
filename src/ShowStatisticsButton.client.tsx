@@ -16,9 +16,7 @@ const ShowStatisticsButton: React.FC = () => {
                         setLocation((loc) => ({
                             selectedId: null,
                             isEditing: loc.isEditing,
-                            searchText: loc.searchText,
                             showStatistics: !location.showStatistics,
-                            filterFavorites: loc.filterFavorites,
                         }));
                 });
             }}>

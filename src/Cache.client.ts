@@ -10,7 +10,7 @@
 import {unstable_getCacheForType, unstable_useCacheRefresh} from 'react';
 // @ts-ignore
 import {createFromFetch} from 'react-server-dom-webpack';
-import {ILocation, LocationCache, Response} from './types';
+import {ILocation, ISidebarLocation, LocationCache, Response} from './types';
 
 function createResponseCache(): LocationCache {
     return new Map<string, Response>();
@@ -34,6 +34,22 @@ export function useServerResponse(location: ILocation) {
     }
     const fetchResponse = createFromFetch(
         fetch('/react?location=' + encodeURIComponent(key))
+    ) as Response;
+    cache.set(key, fetchResponse);
+    return fetchResponse;
+}
+
+export function useSidebarServerResponse(location: ISidebarLocation) {
+    const key = JSON.stringify(location);
+    const cache = unstable_getCacheForType(
+      createResponseCache
+    ) as LocationCache;
+    let response = cache.get(key);
+    if (response !== undefined) {
+        return response;
+    }
+    const fetchResponse = createFromFetch(
+      fetch('/sidebar?sidebarlocation=' + encodeURIComponent(key))
     ) as Response;
     cache.set(key, fetchResponse);
     return fetchResponse;

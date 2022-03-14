@@ -3,8 +3,11 @@ import {ReactNode} from 'react';
 export interface ILocation {
     selectedId: number | null;
     isEditing: boolean;
-    searchText: string;
     showStatistics: boolean;
+}
+
+export interface ISidebarLocation {
+    searchText: string;
     filterFavorites: boolean;
 }
 

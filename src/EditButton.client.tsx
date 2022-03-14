@@ -31,9 +31,7 @@ const EditButton: React.FC<EditButtonProps> = ({noteId, children}) => {
                         setLocation((loc) => ({
                             selectedId: noteId,
                             isEditing: true,
-                            searchText: loc.searchText,
                             showStatistics: loc.showStatistics,
-                            filterFavorites: loc.filterFavorites,
                         }));
                 });
             }}

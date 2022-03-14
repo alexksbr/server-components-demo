@@ -27,9 +27,7 @@ const Content = () => {
     const [location, setLocation] = useState<ILocation>({
         selectedId: null,
         isEditing: false,
-        searchText: '',
         showStatistics: false,
-        filterFavorites: false,
     });
     const response = useServerResponse(location);
     return (
